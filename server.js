@@ -1,9 +1,10 @@
 const express = require('express');
 const userRoutes =  require("./routes/users")
+const adminRoutes = require("./routes/admin")
 const userController = require('./controllers/userController')
 const cron = require('node-cron');
 
-const app = express();
+const app = express(); 
 require("dotenv").config()
 
 // Add middleware and routes here
@@ -12,6 +13,8 @@ app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use("/api/v1/user",userRoutes)
+app.use("/api/v1/admin",adminRoutes)
+
 
 
 const mongoose = require('mongoose');

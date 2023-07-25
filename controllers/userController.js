@@ -21,7 +21,6 @@ function generateSixDigitCode() {
   return sixDigitCode;
 }
 
-
 // Register a new user
 module.exports.registerUser = async (req, res) => {
   try {
@@ -62,8 +61,6 @@ module.exports.registerUser = async (req, res) => {
     
   }
 };
-
-
 
 // Login user
 module.exports.loginUser = async (req, res) => {
@@ -125,10 +122,13 @@ module.exports.depositFunds = async (req, res) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 module.exports.getDeposits = async (req, res) => {
   try {
+    const userId = req.user.userId
+
     // Fetch all deposits from the database
-    const deposits = await Deposit.find({});
+    const deposits = await Deposit.find({userId});
 
     return res.status(200).json(deposits);
   } catch (error) {
@@ -161,6 +161,7 @@ module.exports.approveDeposit = async (req, res) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 module.exports.declineDeposit = async (req, res) => {
   try {
     const { userId, depositId } = req.body;
@@ -227,7 +228,10 @@ module.exports.withdrawFunds = async (req, res) => {
 module.exports.getWithdrawals = async (req, res) => {
   try {
     // Fetch all withdrawals from the database
-    const withdrawals = await Withdrawal.find({});
+    const userId = req.user.userId
+
+    // Fetch all deposits from the database
+    const deposits = await Deposit.find({userId});
 
     return res.status(200).json(withdrawals);
   } catch (error) {
@@ -422,7 +426,6 @@ module.exports.getInvestmentById = async (req, res) => {
   }
 };
 
-
 // Function to update the user's profit
 module.exports.updateUserProfit = async (req, res) => {
   try {
@@ -445,6 +448,7 @@ module.exports.updateUserProfit = async (req, res) => {
     // res.status(500).json({ error: 'Could not update user profits.' });
   }
 };
+
 module.exports.getTotalInvestedAmount = async (req, res) => {
   try {
     const userId = req.user.userId
@@ -462,6 +466,7 @@ module.exports.getTotalInvestedAmount = async (req, res) => {
     res.status(500).json({ error: 'Could not calculate total invested amount.' });
   }
 };
+
 exports.getTransactionHistory = async (req, res) => {
   try {
     const userId = req.user.userId
