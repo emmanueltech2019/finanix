@@ -207,7 +207,7 @@ module.exports.registerAdmin = async (req, res) => {
 
   exports.getAllSums = async (req, res) => {
     try {
-      const userId = req.user.userId
+      const adminId = req.user.adminId
   
       // Find all withdrawals and deposits of the specific user
       const withdrawals = await Withdrawal.find({  });
@@ -234,11 +234,12 @@ module.exports.registerAdmin = async (req, res) => {
       const totalWithdrawal = withdrawals.reduce((total, withdrawal) => total + withdrawal.amount, 0);
   
       // Check if the user exists and retrieve their balance
-      const users = await User.find();
+      const user = await User.find();
      
   
       res.status(200).json({ transactionHistory, totalDeposit, totalWithdrawal, balance:user.balance, users:user.length });
     } catch (error) {
+      console.log(error)
       res.status(500).json({ error: 'Could not retrieve transaction history.' });
     }
   };
