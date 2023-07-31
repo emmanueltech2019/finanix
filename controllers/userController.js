@@ -231,7 +231,7 @@ module.exports.getWithdrawals = async (req, res) => {
     const userId = req.user.userId
 
     // Fetch all deposits from the database
-    const deposits = await Deposit.find({userId});
+    const withdrawals = await Deposit.find({userId});
 
     return res.status(200).json(withdrawals);
   } catch (error) {
@@ -366,6 +366,12 @@ module.exports.createInvestment = async (req, res) => {
     // Check if the user's balance is sufficient for the investment
     if (userBalance < amount) {
       return res.status(400).json({ message: 'Insufficient balance.' });
+    }
+
+    // Check if the user already has an active investment for the selected plan
+    const existingInvestment = await Investment.findOne({ userId, plan });
+    if (existingInvestment) {
+      return res.status(400).json({ message: `You already have an active investment for ${plan}.` });
     }
     
     // Deduct the investment amount from the user's balance
