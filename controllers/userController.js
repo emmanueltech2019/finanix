@@ -229,7 +229,7 @@ module.exports.getWithdrawals = async (req, res) => {
   try {
     // Fetch all withdrawals from the database
     const userId = req.user.userId
-
+ 
     // Fetch all deposits from the database
     const withdrawals = await Deposit.find({userId});
 
